@@ -26,36 +26,39 @@ fn write_vec_to_file(vec: &Vec<u64>, filename: &str) -> std::io::Result<()> {
 }
 */
 
-fn generate_sequence(first_term: u64, print_flg:bool) -> u64 {
-    //let mut sequence = Vec::new();
-    let mut terms: u64 = 1;
-    let mut m: u64 = first_term;
-    let mut i: u64 = first_term+1;    
+fn generate_sequence(mut m: u64, print_flg:bool) -> u64 {
     let mut first_digit_calc = FirstDigitCalculator::new();
-    
-    //sequence.push(m);
-    if print_flg{
-        println!("{m}");
-    }
-    let mut left = last_digit(m) * 10;
-    let mut diff:u64 = 0;
-    while diff < 100 {
-        i += 1;
-        diff = i - m;
-        if diff == left + first_digit_calc.first_digit(i) {
-            //sequence.push(i);
-            terms += 1;
-            m = i;
-            if print_flg{
-                println!("{m}");
+    let mut terms:u64 = 1;
+    loop {
+        if print_flg{
+            println!("{m}");
+        }        
+        
+        let left = m + last_digit(m) * 10;
+        let mut found = false;
+
+        for right in 0..=9 {
+            let an = left + right;
+            let first_digit = first_digit_calc.first_digit(an);
+
+            if right == first_digit {
+                m = an; // Update the start to the new term
+                found = true;
+                terms += 1;
+                break;
             }
-            left = last_digit(m) * 10;
-            i += left;
+        }
+
+        // If no valid 'an' was found, exit the loop
+        if !found {
+            //println!("No valid term found, terminating.");
+            break;
         }
     }
 
     terms
 }
+
 
 fn main() {
     let args: Vec<String> = env::args().collect();
