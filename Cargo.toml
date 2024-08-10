@@ -1,0 +1,15 @@
+[package]
+name = "comma_seq"
+version = "0.1.0"
+edition = "2021"
+
+[dev-dependencies]
+criterion = "0.5.1"
+rand = "0.8.5"
+
+[dependencies]
+
+
+[[bench]]
+name = "first_digit_benchmark"
+harness = false
